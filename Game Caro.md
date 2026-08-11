@@ -1,8 +1,5 @@
-html
-```
+[Chơi cờ caro](https://papergames.io/vi/c%E1%BB%9D-caro)
 
-https://papergames.io/vi/c%E1%BB%9D-caro
-```
 
 ---
 
