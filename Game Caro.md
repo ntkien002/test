@@ -10,7 +10,7 @@ bash
 // ==UserScript==
 // @name         PaperGames Caro Threat Engine
 // @namespace    local.codex
-// @version      3.5.0
+// @version      3.6.1
 // @description  Canh bao de doa, goi y nuoc tot (X cheo), du doan nuoc tiep theo, panel legend.
 // @match        https://papergames.io/*/r/*
 // @grant        none
@@ -38,6 +38,8 @@ bash
   let observedBoard;
   let lastWarning = '';
   let scanTimer;
+  let threatLineMoves = [];
+  let threatLineEventsBound = false;
 
   const ensureUi = () => {
     if (!document.querySelector('#caro-threat-style')) {
@@ -54,6 +56,15 @@ bash
           pointer-events: none;
         }
         table.table-board td { position: relative; }
+        #caro-threat-lines {
+          position: fixed; z-index: 8; overflow: visible;
+          pointer-events: none;
+        }
+        #caro-threat-lines line {
+          stroke: #fff; stroke-width: 3.5; stroke-linecap: round;
+          opacity: 1;
+          filter: drop-shadow(0 0 2px #000) drop-shadow(0 1px 3px #000);
+        }
         .caro-danger::after, .caro-fork::after, .caro-best::after,
         .caro-double-opp::after, .caro-double-me::after,
         .caro-three-four-opp::after, .caro-three-four-me::after,
@@ -320,6 +331,53 @@ bash
           background: #ffd43b !important;
           box-shadow: 0 0 0 4px #f5222d, 0 2px 5px rgba(0,0,0,.6) !important;
         }
+
+        /* High-contrast board palette */
+        .caro-hint::before, .caro-hint::after {
+          background: #00d83a !important;
+          box-shadow: 0 0 4px #001a08, 0 0 9px #00ff44 !important;
+        }
+        .caro-predict-me::after {
+          background: #0068ff !important;
+          border-color: #fff !important;
+          box-shadow: 0 0 0 1px #001a4d, 0 0 9px #008cff !important;
+        }
+        .caro-predict-opp::after {
+          border-color: #ff4800 !important;
+          box-shadow: 0 0 0 1px #591900, 0 0 9px #ff4800 !important;
+        }
+        .caro-danger::after, .caro-fork::after,
+        .caro-double-opp::after, .caro-three-four-opp::after,
+        .caro-two-three-opp::after, .caro-open-three-opp::after,
+        .caro-two-one-one-opp::after, .caro-two-two-one-opp::after {
+          background: #ffc400 !important;
+          border: 2px solid #fff !important;
+          box-shadow: 0 0 0 2px #4d3b00, 0 0 10px #ffc400 !important;
+        }
+        .caro-best::after, .caro-double-me::after,
+        .caro-three-four-me::after, .caro-two-three-me::after,
+        .caro-attack::after, .caro-open-three-me::after,
+        .caro-two-one-one-me::after, .caro-two-two-one-me::after {
+          background: #e60018 !important;
+          border: 2px solid #fff !important;
+          box-shadow: 0 0 0 2px #4d0008, 0 0 10px #ff001b !important;
+        }
+        .caro-danger.caro-best::after, .caro-fork.caro-best::after,
+        .caro-double-opp.caro-best::after,
+        .caro-three-four-opp.caro-best::after,
+        .caro-two-three-opp.caro-best::after,
+        .caro-open-three-opp.caro-best::after,
+        .caro-two-one-one-opp.caro-best::after,
+        .caro-two-two-one-opp.caro-best::after {
+          background: #ffc400 !important;
+          box-shadow: 0 0 0 4px #e60018, 0 0 12px #ffc400 !important;
+        }
+        .cli-x::before, .cli-x::after { background: #00d83a; }
+        .cli-diamond::after { background: #0068ff; }
+        .cli-circle::after { border-color: #ff4800; }
+        .cli-dot.yellow::after { background: #ffc400; }
+        .cli-dot.red::after { background: #e60018; }
+        .cli-dot.orange::after { background: #ff4800; }
       `;
       document.head.appendChild(style);
     }
@@ -400,7 +458,7 @@ bash
           </div>
 
           <hr class="caro-divider">
-          <div id="caro-status-line" style="font-size:10px;color:#868e96;text-align:center">v3.5.0</div>
+          <div id="caro-status-line" style="font-size:10px;color:#868e96;text-align:center">v3.6.1</div>
         </div>
       `;
       document.body.appendChild(panel);
@@ -1071,6 +1129,93 @@ bash
       state.cells[row * SIZE + col]?.classList.add(className));
   };
 
+  const threatLineSegments = (moves) => {
+    const uniqueMoves = [...new Map(
+      moves.map(([row, col]) => [`${row},${col}`, [row, col]])
+    ).values()];
+    const lineTypes = [
+      { key: (row) => `h:${row}`, order: (_, col) => col },
+      { key: (_, col) => `v:${col}`, order: (row) => row },
+      { key: (row, col) => `d1:${row - col}`, order: (row) => row },
+      { key: (row, col) => `d2:${row + col}`, order: (row) => row },
+    ];
+    const segments = [];
+
+    lineTypes.forEach(({ key, order }) => {
+      const groups = new Map();
+      uniqueMoves.forEach((move) => {
+        const groupKey = key(...move);
+        if (!groups.has(groupKey)) groups.set(groupKey, []);
+        groups.get(groupKey).push(move);
+      });
+      groups.forEach((group) => {
+        if (group.length < 2) return;
+        group.sort((a, b) => order(...a) - order(...b));
+        segments.push([group[0], group[group.length - 1]]);
+      });
+    });
+
+    return segments;
+  };
+
+  const renderThreatLines = (table, moves = threatLineMoves) => {
+    threatLineMoves = moves.map(([row, col]) => [row, col]);
+    let overlay = document.getElementById('caro-threat-lines');
+    if (!overlay) {
+      overlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      overlay.id = 'caro-threat-lines';
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(overlay);
+    }
+
+    if (!table?.isConnected || !threatLineMoves.length) {
+      overlay.replaceChildren();
+      overlay.style.display = 'none';
+      return;
+    }
+
+    const cells = [...table.querySelectorAll('td')];
+    const tableRect = table.getBoundingClientRect();
+    overlay.style.display = 'block';
+    overlay.style.left = `${tableRect.left}px`;
+    overlay.style.top = `${tableRect.top}px`;
+    overlay.setAttribute('width', tableRect.width);
+    overlay.setAttribute('height', tableRect.height);
+    overlay.setAttribute('viewBox', `0 0 ${tableRect.width} ${tableRect.height}`);
+
+    const center = ([row, col]) => {
+      const rect = cells[row * SIZE + col]?.getBoundingClientRect();
+      return rect && [
+        rect.left - tableRect.left + rect.width / 2,
+        rect.top - tableRect.top + rect.height / 2,
+      ];
+    };
+    const fragment = document.createDocumentFragment();
+    let lineCount = 0;
+    threatLineSegments(threatLineMoves).forEach(([fromMove, toMove]) => {
+      const from = center(fromMove);
+      const to = center(toMove);
+      if (!from || !to) return;
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', from[0]);
+      line.setAttribute('y1', from[1]);
+      line.setAttribute('x2', to[0]);
+      line.setAttribute('y2', to[1]);
+      fragment.appendChild(line);
+      lineCount++;
+    });
+    overlay.replaceChildren(fragment);
+    window.caroThreatLines = { moves: threatLineMoves, lineCount };
+  };
+
+  const bindThreatLineEvents = () => {
+    if (threatLineEventsBound) return;
+    threatLineEventsBound = true;
+    const redraw = () => renderThreatLines(observedBoard);
+    window.addEventListener('resize', redraw, { passive: true });
+    window.addEventListener('scroll', redraw, { passive: true, capture: true });
+  };
+
   const getLastMoveColor = (table) => {
     const lastCell = table.querySelector('.last-move')?.closest('td');
     if (lastCell?.querySelector('.circle-dark')) return 'dark';
@@ -1210,6 +1355,10 @@ bash
     mark(state, opponentTwoTwoOnes, 'caro-two-two-one-opp');
     mark(state, opponentOpenThrees, 'caro-open-three-opp');
     mark(state, opponentForks, 'caro-fork');
+    renderThreatLines(
+      table,
+      [...opponentThreatMoves].map((move) => move.split(',').map(Number))
+    );
 
     let message = '';
     let urgent = false;
@@ -1230,8 +1379,8 @@ bash
     banner.textContent = showWarn ? message : '';
     banner.style.display = (showWarn && message) ? 'block' : 'none';
     banner.style.background = urgent
-      ? 'rgba(180,35,24,.94)'
-      : opponentForks.length ? 'rgba(180,83,9,.94)' : 'rgba(0,91,112,.94)';
+      ? 'rgba(130,0,12,.98)'
+      : opponentForks.length ? 'rgba(145,48,0,.98)' : 'rgba(0,55,82,.98)';
 
     const signature = `${opponentWins.join(';')}|${opponentThreeFours.join(';')}|${opponentTwoTwoOnes.join(';')}|${opponentDoubleThrees.join(';')}|${opponentTwoThrees.join(';')}|${opponentTwoOneOnes.join(';')}|${opponentOpenThrees.join(';')}|${opponentForks.join(';')}`;
     if (cfg.soundOn !== false && message && signature !== lastWarning && (urgent || opponentForks.length)) beep(urgent);
@@ -1244,6 +1393,8 @@ bash
     observer?.disconnect();
     observedBoard = board;
     lastWarning = '';
+    renderThreatLines(board, []);
+    bindThreatLineEvents();
     const banner = document.querySelector('#caro-threat-warning');
     if (banner) {
       banner.textContent = '';
@@ -1251,7 +1402,9 @@ bash
     }
     window.caroThreatIdentity = null;
     window.caroThreatState = { ready: false, reason: 'match-loading' };
-    const scheduleScan = () => {
+    const scheduleScan = (mutations = []) => {
+      if (mutations.length && mutations.every((mutation) =>
+        mutation.target.closest?.('#caro-threat-lines'))) return;
       clearTimeout(scanTimer);
       scanTimer = setTimeout(scan, 180);
     };
@@ -1279,6 +1432,7 @@ bash
   window.caroThreatScan = scan;
   window.caroFindEngineMove = findEngineMove;
   window.caroEngineSelfTests = runEngineSelfTests;
-  window.caroThreatEngineVersion = '3.5.0';
+  window.caroThreatEngineVersion = '3.6.1';
 })();
+
 ```
