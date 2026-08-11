@@ -1,3 +1,5 @@
+bash
+```
 // ==UserScript==
 // @name         PaperGames Caro Threat Engine
 // @namespace    local.codex
@@ -1272,3 +1274,4 @@
   window.caroEngineSelfTests = runEngineSelfTests;
   window.caroThreatEngineVersion = '3.5.0';
 })();
+```
