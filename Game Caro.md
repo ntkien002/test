@@ -7,11 +7,12 @@
 
 bash
 ```
+
 // ==UserScript==
 // @name         PaperGames Caro Threat Engine
 // @namespace    local.codex
-// @version      3.6.1
-// @description  Canh bao de doa, goi y nuoc tot (X cheo), du doan nuoc tiep theo, panel legend.
+// @version      3.8.0
+// @description  Canh bao de doa, goi y nuoc tot (X cheo), du doan nuoc tiep theo, panel legend. v3.8.0 - toi uu scan, nhan dien nuoc di.
 // @match        https://papergames.io/*/r/*
 // @grant        none
 // ==/UserScript==
@@ -458,7 +459,7 @@ bash
           </div>
 
           <hr class="caro-divider">
-          <div id="caro-status-line" style="font-size:10px;color:#868e96;text-align:center">v3.6.1</div>
+          <div id="caro-status-line" style="font-size:10px;color:#868e96;text-align:center">v3.8.0</div>
         </div>
       `;
       document.body.appendChild(panel);
@@ -555,7 +556,28 @@ bash
     }
 
     const detectedColors = new Set(signals.map((signal) => signal.color).filter(Boolean));
-    const me = detectedColors.size === 1 ? [...detectedColors][0] : null;
+
+    let me = null;
+    let identitySource = 'waiting';
+
+    if (detectedColors.size === 1) {
+      // Tất cả signal đồng thuận — chắc chắn
+      me = [...detectedColors][0];
+      identitySource = signals.map((s) => s.source).join('+');
+    } else if (detectedColors.size > 1) {
+      // Có xung đột — ưu tiên profile-name > profile-avatar > timing signals
+      const priority = ['profile-name', 'profile-avatar', 'active-turn', 'last-move'];
+      for (const src of priority) {
+        const hit = signals.find((s) => s.source === src && s.color);
+        if (hit) {
+          me = hit.color;
+          identitySource = `${src}(conflict-resolved)`;
+          break;
+        }
+      }
+      if (!me) identitySource = 'conflict';
+    }
+
     return {
       me,
       opponent: oppositeColor(me),
@@ -563,9 +585,7 @@ bash
       lastMoveColor,
       hasClickableCell,
       activeColor,
-      identitySource: me
-        ? signals.map((signal) => signal.source).join('+')
-        : detectedColors.size > 1 ? 'conflict' : 'waiting',
+      identitySource,
     };
   };
 
@@ -615,26 +635,51 @@ bash
     return wins;
   };
 
+  // Cache: candidateMoves is called many times per scan with same grid+radius.
+  // We bust the cache whenever grid changes (tracked via stone count + a cheap hash).
+  let _candCache = new Map();
   const candidateMoves = (grid, radius = 2) => {
+    // Cheap identity: count stones and xor positions — fast and collision-rare for our use.
+    let cacheKey = radius;
+    for (let i = 0; i < SIZE; i++) {
+      for (let j = 0; j < SIZE; j++) {
+        if (grid[i][j]) cacheKey = (cacheKey * 31 + i * SIZE + j + (grid[i][j] === 'dark' ? 1 : 2)) | 0;
+      }
+    }
+    if (_candCache.has(cacheKey)) return _candCache.get(cacheKey);
+
     const stones = [];
     for (let row = 0; row < SIZE; row++) {
       for (let col = 0; col < SIZE; col++) {
         if (grid[row][col]) stones.push([row, col]);
       }
     }
-    if (!stones.length) return [[7, 7]];
+    if (!stones.length) {
+      const result = [[7, 7]];
+      _candCache.set(cacheKey, result);
+      return result;
+    }
 
-    const candidates = new Set();
+    const seen = new Uint8Array(SIZE * SIZE);
+    const candidates = [];
     for (const [stoneRow, stoneCol] of stones) {
       for (let dr = -radius; dr <= radius; dr++) {
         for (let dc = -radius; dc <= radius; dc++) {
           const row = stoneRow + dr;
           const col = stoneCol + dc;
-          if (inBounds(row, col) && !grid[row][col]) candidates.add(`${row},${col}`);
+          if (!inBounds(row, col) || grid[row][col]) continue;
+          const idx = row * SIZE + col;
+          if (!seen[idx]) {
+            seen[idx] = 1;
+            candidates.push([row, col]);
+          }
         }
       }
     }
-    return [...candidates].map((key) => key.split(',').map(Number));
+    _candCache.set(cacheKey, candidates);
+    // Keep cache small — only last 4 unique states (enough for one scan cycle)
+    if (_candCache.size > 4) _candCache.delete(_candCache.keys().next().value);
+    return candidates;
   };
 
   const immediateWins = (grid, color, candidates = candidateMoves(grid, 1)) =>
@@ -771,6 +816,15 @@ bash
     });
   };
 
+  const openTwoDirectionsForMove = (grid, row, col, color) => {
+    if (grid[row][col]) return 0;
+    grid[row][col] = color;
+    const count = DIRECTIONS.filter(([dr, dc]) =>
+      directionHasOpenTwo(grid, row, col, color, dr, dc)).length;
+    grid[row][col] = null;
+    return count;
+  };
+
   const createsTwoThree = (grid, row, col, color) => {
     if (grid[row][col]) return false;
     grid[row][col] = color;
@@ -783,6 +837,46 @@ bash
     grid[row][col] = null;
     return threes.some((threeDirection) =>
       twos.some((twoDirection) => twoDirection !== threeDirection));
+  };
+
+  // Đếm số quân trên bàn — nhanh hơn grid.flat().filter(Boolean).length
+  const countStones = (grid) => {
+    let n = 0;
+    for (let r = 0; r < SIZE; r++) for (let c = 0; c < SIZE; c++) if (grid[r][c]) n++;
+    return n;
+  };
+
+  const OPENING_2X3_STONE_LIMIT = 18;
+  const openingTwoThreePriority = (
+    grid, row, col, color, enemy,
+    stonesOnBoard = countStones(grid)
+  ) => {
+    const active = stonesOnBoard <= OPENING_2X3_STONE_LIMIT;
+    if (!active || grid[row][col]) {
+      return {
+        active, score: 0, makesTwoThree: false, blocksTwoThree: false,
+        ownOpenTwos: 0, blockedOpenTwos: 0,
+      };
+    }
+
+    const makesTwoThree = createsTwoThree(grid, row, col, color);
+    const blocksTwoThree = createsTwoThree(grid, row, col, enemy);
+    const ownOpenTwos = openTwoDirectionsForMove(grid, row, col, color);
+    const blockedOpenTwos = openTwoDirectionsForMove(grid, row, col, enemy);
+    let score = 0;
+
+    // Build our 2x3 slightly before a single defensive 2x3 block.
+    // A move doing both receives the largest opening bonus.
+    if (makesTwoThree) score += 300000;
+    if (blocksTwoThree) score += 280000;
+    if (makesTwoThree && blocksTwoThree) score += 180000;
+    if (ownOpenTwos >= 2) score += 50000;
+    if (blockedOpenTwos >= 2) score += 40000;
+
+    return {
+      active, score, makesTwoThree, blocksTwoThree,
+      ownOpenTwos, blockedOpenTwos,
+    };
   };
 
   const twoThreeMoves = (grid, color, candidates = candidateMoves(grid, 2)) =>
@@ -871,6 +965,7 @@ bash
 
   const bestMove = (grid, me, opponent) => {
     const candidates = candidateMoves(grid, 2);
+    const stonesOnBoard = countStones(grid);
     let best = null;
     let bestScore = -Infinity;
 
@@ -889,6 +984,9 @@ bash
       const blocksTwoTwoOne = createsTwoTwoOne(grid, row, col, opponent);
       const attack = shapeScore(grid, row, col, me);
       const defense = shapeScore(grid, row, col, opponent);
+      const openingPriority = openingTwoThreePriority(
+        grid, row, col, me, opponent, stonesOnBoard
+      );
 
       grid[row][col] = me;
       const remainingLosses = immediateWins(grid, opponent).length;
@@ -910,6 +1008,7 @@ bash
       if (blocksTwoTwoOne) score += 520000;
       if (makesTwoTwoOne) score += 620000;
       if (myWin) score += 5000000;
+      if (!myWin && !blocksWin) score += openingPriority.score;
 
       if (score > bestScore) {
         bestScore = score;
@@ -960,18 +1059,22 @@ bash
   };
 
   const engineOrderedMoves = (grid, color, enemy, depth, limit) => {
-    const stonesOnBoard = grid.flat().filter(Boolean).length;
+    const stonesOnBoard = countStones(grid);
     const radius = depth >= 3 && stonesOnBoard > 20 ? 1 : 2;
     return candidateMoves(grid, radius)
       .map(([row, col]) => {
         const wins = isWinningMove(grid, row, col, color);
         const blocksWin = isWinningMove(grid, row, col, enemy);
+        const openingPriority = openingTwoThreePriority(
+          grid, row, col, color, enemy, stonesOnBoard
+        );
         let score = shapeScore(grid, row, col, color) +
           shapeScore(grid, row, col, enemy) * 1.1;
         if (createsThreeFour(grid, row, col, color)) score += 900000;
         if (createsThreeFour(grid, row, col, enemy)) score += 800000;
         if (openThreeDirectionsForMove(grid, row, col, color) >= 2) score += 500000;
         if (openThreeDirectionsForMove(grid, row, col, enemy) >= 2) score += 450000;
+        if (!wins && !blocksWin) score += openingPriority.score;
         if (blocksWin) score += 8000000;
         if (wins) score += 10000000;
         return { move: [row, col], score };
@@ -986,6 +1089,7 @@ bash
     const deadline = startedAt + timeLimit;
     const transposition = new Map();
     const initialHash = boardHash(grid, me, opponent);
+    const rootStonesOnBoard = countStones(grid);
     let completedMove = null;
     let completedScore = -Infinity;
     let completedDepth = 0;
@@ -1059,16 +1163,22 @@ bash
 
         for (const [row, col] of rootMoves) {
           checkTime();
+          const openingPriority = openingTwoThreePriority(
+            grid, row, col, me, opponent, rootStonesOnBoard
+          );
           grid[row][col] = me;
           const nextHash = (initialHash ^ ZOBRIST[row * SIZE + col][0]) >>> 0;
           let score;
           try {
             score = minimax(
-              depth - 1, false, alpha, Infinity, nextHash,
+              depth - 1, false, alpha - openingPriority.score, Infinity, nextHash,
               [row, col], me, 1
             );
           } finally {
             grid[row][col] = null;
+          }
+          if (Math.abs(score) < ENGINE_WIN / 2) {
+            score += openingPriority.score;
           }
           if (score > depthScore) {
             depthScore = score;
@@ -1087,6 +1197,13 @@ bash
       }
     }
 
+    const openingPlan = completedMove
+      ? openingTwoThreePriority(
+        grid, completedMove[0], completedMove[1],
+        me, opponent, rootStonesOnBoard
+      )
+      : null;
+
     return {
       move: completedMove,
       score: completedScore,
@@ -1094,6 +1211,7 @@ bash
       nodes: visitedNodes,
       milliseconds: Math.round(performance.now() - startedAt),
       forced: Math.abs(completedScore) >= ENGINE_WIN - 10,
+      openingPlan,
     };
   };
 
@@ -1117,10 +1235,35 @@ bash
       blockingGrid, 'me', 'opponent', 180, 2
     );
 
+    const twoThreeBlockGrid = makeGrid();
+    twoThreeBlockGrid[7][6] = 'opponent';
+    twoThreeBlockGrid[7][8] = 'opponent';
+    twoThreeBlockGrid[6][7] = 'opponent';
+    twoThreeBlockGrid[5][5] = 'me';
+    const twoThreeBlockResult = findEngineMove(
+      twoThreeBlockGrid, 'me', 'opponent', 220, 2
+    );
+
+    const twoThreeCreateGrid = makeGrid();
+    twoThreeCreateGrid[7][6] = 'me';
+    twoThreeCreateGrid[7][8] = 'me';
+    twoThreeCreateGrid[6][7] = 'me';
+    twoThreeCreateGrid[4][4] = 'opponent';
+    const twoThreeCreateResult = findEngineMove(
+      twoThreeCreateGrid, 'me', 'opponent', 220, 2
+    );
+    const blocksTwoThree =
+      twoThreeBlockResult.openingPlan?.blocksTwoThree;
+    const makesTwoThree = twoThreeCreateResult.move?.join(',') === '7,7' &&
+      twoThreeCreateResult.openingPlan?.makesTwoThree;
+
     return {
-      passed: isEndpoint(winningResult.move) && isEndpoint(blockingResult.move),
+      passed: isEndpoint(winningResult.move) && isEndpoint(blockingResult.move) &&
+        blocksTwoThree && makesTwoThree,
       winningMove: winningResult.move,
       blockingMove: blockingResult.move,
+      twoThreeBlockMove: twoThreeBlockResult.move,
+      twoThreeCreateMove: twoThreeCreateResult.move,
     };
   };
 
@@ -1251,15 +1394,26 @@ bash
       me, opponent, localName, lastMoveColor,
       hasClickableCell, activeColor, identitySource,
     } = identity;
+    // myTurn: có ô clickable và (không đọc được activeColor, hoặc activeColor là mình)
     const myTurn = Boolean(
       me && hasClickableCell && (!activeColor || activeColor === me)
     );
+    // opponentTurn: không clickable, last move là của mình, active là đối thủ
     const opponentTurn = Boolean(
       me && opponent && !hasClickableCell && lastMoveColor === me &&
       activeColor === opponent
     );
+    // refreshThreats: cần scan khi
+    //   (a) lượt mình — đối thủ vừa đi (lastMove là opponent), hoặc
+    //   (b) lượt đối thủ — mình vừa đi,
+    //   (c) ván mới bắt đầu (chưa có nước nào nhưng đã nhận diện được me/opponent)
+    const stonesOnBoard = countStones(state.grid);
     const refreshThreats = Boolean(
-      opponentTurn || (myTurn && lastMoveColor === opponent)
+      me && opponent && (
+        opponentTurn ||
+        (myTurn && (lastMoveColor === opponent || stonesOnBoard <= 1)) ||
+        (!lastMoveColor && stonesOnBoard === 0)
+      )
     );
     window.caroThreatIdentity = {
       name: localName, me, opponent, source: identitySource,
@@ -1303,14 +1457,33 @@ bash
         const [hr, hc] = engineResult.move;
         state.cells[hr * SIZE + hc]?.classList.add('caro-hint');
       }
+      const statusLine = document.getElementById('caro-status-line');
+      if (statusLine) {
+        const plan = engineResult.openingPlan;
+        if (plan?.makesTwoThree && plan?.blocksTwoThree) {
+          statusLine.textContent = 'Mo dau: tao + chan the 2x3';
+        } else if (plan?.makesTwoThree) {
+          statusLine.textContent = 'Mo dau: uu tien tao the 2x3';
+        } else if (plan?.blocksTwoThree) {
+          statusLine.textContent = 'Mo dau: chan doi thu tao 2x3';
+        } else if (plan?.active && plan.ownOpenTwos >= 2) {
+          statusLine.textContent = 'Mo dau: dang xay nen the 2x3';
+        } else {
+          statusLine.textContent = 'v3.8.0';
+        }
+      }
     } else {
       window.caroEngineAnalysis = null;
+      const statusLine = document.getElementById('caro-status-line');
+      if (statusLine) statusLine.textContent = 'v3.8.0';
     }
+
+    // Tính candidates một lần, dùng chung cho predict-me, predict-opp, và threat scan
+    const candidates = candidateMoves(state.grid, 2);
 
     // ── PREDICT-ME (hình thoi ◆) – top-3 nước của mình ───────────────
     if (cfg.showPredMe !== false) {
-      const myCandidates = candidateMoves(state.grid, 2);
-      const myTopMoves = topAttackMoves(state.grid, me, myCandidates, 3);
+      const myTopMoves = topAttackMoves(state.grid, me, candidates, 3);
       myTopMoves.forEach(([pr, pc]) => {
         const cell = state.cells[pr * SIZE + pc];
         if (cell && !cell.classList.contains('caro-hint')) {
@@ -1321,14 +1494,12 @@ bash
 
     // ── PREDICT-OPP (hình tròn ○ cam) – top-2 nước đối thủ ──────────
     if (cfg.showPredOpp !== false) {
-      const oppCandidates = candidateMoves(state.grid, 2);
-      const oppTopMoves = topAttackMoves(state.grid, opponent, oppCandidates, 2);
+      const oppTopMoves = topAttackMoves(state.grid, opponent, candidates, 2);
       oppTopMoves.forEach(([pr, pc]) => {
         state.cells[pr * SIZE + pc]?.classList.add('caro-predict-opp');
       });
     }
-
-    const candidates = candidateMoves(state.grid, 2);
+    // Tất cả dùng chung candidates đã tính ở trên — không tái tạo
     const opponentWins = immediateWins(state.grid, opponent, candidates);
     const opponentThreeFours = threeFourMoves(state.grid, opponent, candidates);
     const opponentDoubleThrees = doubleThreeMoves(state.grid, opponent, candidates);
@@ -1395,6 +1566,8 @@ bash
     lastWarning = '';
     renderThreatLines(board, []);
     bindThreatLineEvents();
+    const statusLine = document.getElementById('caro-status-line');
+    if (statusLine) statusLine.textContent = 'v3.8.0';
     const banner = document.querySelector('#caro-threat-warning');
     if (banner) {
       banner.textContent = '';
@@ -1432,7 +1605,6 @@ bash
   window.caroThreatScan = scan;
   window.caroFindEngineMove = findEngineMove;
   window.caroEngineSelfTests = runEngineSelfTests;
-  window.caroThreatEngineVersion = '3.6.1';
-})();
-
+  window.caroThreatEngineVersion = '3.8.0';
+})();     
 ```
