@@ -1,3 +1,5 @@
+bash
+```
 // ==UserScript==
 // @name         KIEN Caro NSE4
 // @namespace    local.codex
@@ -4471,3 +4473,4 @@
   window.caroTrainedBookSummary = TRAINED_CARO_BOOK_SUMMARY;
   window.caroThreatEngineVersion = '4.13.4';
 })();
+```
