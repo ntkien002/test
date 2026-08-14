@@ -1751,7 +1751,7 @@
     ['doubleThreeOne', 74, 84, 'Táº O 2Ã—1Ã—1Ã—1 â†’ 3Ã—3Ã—1', 'CHáº¶N 2Ã—1Ã—1Ã—1 â†’ 3Ã—3Ã—1'],
     ['doubleThree', 70, 80, 'Táº O DOUBLE-THREE', 'CHáº¶N DOUBLE-THREE'],
     ['fourTwo', 69, 78, 'Táº O 3Ã—1Ã—1 â†’ 4Ã—2', 'CHáº¶N 3Ã—1Ã—1 â†’ 4Ã—2'],
-    ['twoOneTwo', 64, 75, 'Táº O 2Ã—1Ã—2', 'CHáº¶N 2Ã—1Ã—2'],
+    ['twoOneTwo', 82, 90, 'Táº O 2Ã—1Ã—2', 'CHáº¶N 2Ã—1Ã—2'],
     ['twoTwoOne', 60, 72, 'Táº O 2Ã—2Ã—1', 'CHáº¶N 2Ã—2Ã—1'],
     ['safeBrokenThree', 58, 70, 'Táº O BROKEN-THREE Sá»NG', 'CHáº¶N BROKEN-THREE Sá»NG'],
     ['complexBroken', 56, 68, 'Táº O CHUá»–I GAP DÃ€I', 'CHáº¶N CHUá»–I GAP DÃ€I'],
@@ -2220,8 +2220,8 @@
       if (blocksDoubleThreeOne) score += 600000;
       if (makesDoubleThreeOne) score += 900000;
       // broken-four (XX.XX) â€“ gap is an immediate win, treat near three-four level
-      if (blocksTwoOneTwo) score += 750000;
-      if (makesTwoOneTwo) score += 1100000;
+      if (blocksTwoOneTwo) score += 950000;
+      if (makesTwoOneTwo) score += 1400000;
       if (makesOpenFour) score += 2000000;
       if (blocksOpenFour) score += 1200000;
       if (myWin) score += 5000000;
@@ -2336,8 +2336,8 @@
             createsTwoTwoOneToFiveTwoOne(grid, row, col, enemy)) {
           score += 1150000;
         }
-        if (createsTwoOneTwo(grid, row, col, color)) score += 850000;
-        if (createsTwoOneTwo(grid, row, col, enemy)) score += 1000000;
+        if (createsTwoOneTwo(grid, row, col, color)) score += 1200000;
+        if (createsTwoOneTwo(grid, row, col, enemy)) score += 1300000;
         if (strategic && createsOneOneOneOneChain(grid, row, col, color)) {
           score += 480000;
         }
