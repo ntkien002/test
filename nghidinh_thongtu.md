@@ -1,5 +1,4 @@
 
----
 
 ## BẢNG QUY TRÌNH CHI TIẾT BẢO ĐẢM AN TOÀN HỆ THỐNG THÔNG TIN THEO CẤP ĐỘ
 *(Đối chiếu Nghị định 85/2016/NĐ-CP và Thông tư 12/2022/TT-BTTTT)*
@@ -7,50 +6,111 @@
 | **PHẦN** | **NỘI DUNG CHI TIẾT** | **NĐ 85/2016** | **TT 12/2022** |
 |----------|----------------------|----------------|----------------|
 | **1** | **Xác định hệ thống thông tin** | Điều 5 | **Điều 7** |
-| | - HTTT chỉ có 1 chủ quản | Khoản 1a | Điều 7, Khoản 1 |
-| | - HTTT hoạt động độc lập, phục vụ nghiệp vụ cụ thể | Khoản 1b | Điều 7, Khoản 2–6 |
+| | - HTTT chỉ có 1 chủ quản | Khoản 1a | Điều 7.1 (xác định HTTT căn cứ khoản 1 Điều 5 NĐ 85) |
+| | - HTTT hoạt động độc lập, phục vụ nghiệp vụ cụ thể | Khoản 1b | Điều 7.2–7.6 (định nghĩa từng loại HTTT) |
 | | - Nếu có nhiều hệ thống thành phần: lấy cấp độ cao nhất | Khoản 2 | |
 | | - Nguyên tắc xác định HTTT để xác định cấp độ | | Điều 7 (toàn bộ) |
-| **2** | **Phân loại thông tin & hệ thống** | Điều 6 | *(Không quy định lại — dẫn chiếu NĐ 85/2016)* |
+| **2** | **Phân loại thông tin & hệ thống** | Điều 6 | *(Dẫn chiếu NĐ 85/2016, TT 12/2022 không quy định lại)* |
 | | **2.1. Phân loại thông tin:** | Khoản 1 | |
 | | • Thông tin công cộng | 1a | |
 | | • Thông tin riêng | 1b | |
 | | • Thông tin cá nhân | 1c | |
 | | • Thông tin bí mật nhà nước | 1d | |
-| | **2.2. Phân loại hệ thống:** | Khoản 2 | Điều 7, Khoản 2–6 |
+| | **2.2. Phân loại hệ thống:** | Khoản 2 | Điều 7.2–7.6 |
 | | • HTTT phục vụ hoạt động nội bộ | 2a | Điều 7.2 |
 | | • HTTT phục vụ người dân, DN | 2b | Điều 7.3 |
 | | • Hệ thống cơ sở hạ tầng thông tin | 2c | Điều 7.4 |
 | | • HTTT điều khiển công nghiệp | 2d | Điều 7.5 |
 | | • HTTT khác | 2đ | Điều 7.6 |
-| **3** | **Xác định cấp độ an toàn** | Điều 7–11 | *(Dẫn chiếu NĐ 85/2016; TT 12/2022 không quy định lại tiêu chí cấp độ)* |
+| **3** | **Xác định cấp độ an toàn** | Điều 7-11 | *(Dẫn chiếu NĐ 85/2016, TT 12/2022 không quy định lại tiêu chí)* |
+| | **Cấp độ 1:** HTTT nội bộ, chỉ xử lý thông tin công cộng | Điều 7 | |
+| | **Cấp độ 2:** Một trong các tiêu chí: | Điều 8 | |
+| | - HTTT nội bộ có xử lý thông tin riêng, cá nhân | 8.1 | |
+| | - Dịch vụ công trực tuyến mức 2 trở xuống | 8.2a | |
+| | - Dịch vụ trực tuyến không thuộc ngành kinh doanh có điều kiện | 8.2b | |
+| | - Dịch vụ trực tuyến < 10.000 người dùng | 8.2c | |
+| | - Cơ sở hạ tầng thông tin phục vụ 1 cơ quan | 8.3 | |
+| | **Cấp độ 3:** Một trong các tiêu chí: | Điều 9 | |
+| | - Xử lý thông tin bí mật nhà nước | 9.1 | |
+| | - Dịch vụ công trực tuyến mức 3 trở lên | 9.2a | |
+| | - Dịch vụ thuộc ngành kinh doanh có điều kiện | 9.2b | |
+| | - Dịch vụ trực tuyến ≥ 10.000 người dùng | 9.2c | |
+| | - Cơ sở hạ tầng dùng chung (ngành/tỉnh) | 9.3 | |
+| | - Điều khiển công nghiệp cấp II, III, IV | 9.4 | |
+| | **Cấp độ 4:** Một trong các tiêu chí: | Điều 10 | |
+| | - Tổ hại nghiêm trọng đến QP, AN | 10.1 | |
+| | - HTTT quốc gia, vận hành 24/7 | 10.2 | |
+| | - Cơ sở hạ tầng toàn quốc, 24/7 | 10.3 | |
+| | - Điều khiển công nghiệp cấp I | 10.4 | |
+| | **Cấp độ 5:** Một trong các tiêu chí: | Điều 11 | |
+| | - Tổ hại đặc biệt nghiêm trọng | 11.1 | |
+| | - Lưu trữ dữ liệu đặc biệt quan trọng | 11.2 | |
+| | - Cơ sở hạ tầng quốc gia kết nối quốc tế | 11.3 | |
+| | - Điều khiển công nghiệp cấp đặc biệt | 11.4 | |
+| | - Theo quyết định Thủ tướng | 11.5 | |
 | **4** | **Lập hồ sơ đề xuất cấp độ** | Điều 15 | **Điều 8** |
 | | **Thành phần hồ sơ:** | | |
-| | 1. Thuyết minh tổng quan về HTTT | 15.1 | Điều 8.2a |
-| | 2. Thuyết minh về việc đề xuất cấp độ | 15.3 | Điều 8.2b |
-| | 3. Thuyết minh phương án bảo đảm ATTT | 15.4 | Điều 8.2c |
-| | 4. Tài liệu thiết kế (dự án mới/đang vận hành) | 15.2 | Điều 8.1 |
+| | 1. Tài liệu mô tả, thuyết minh tổng quan về HTTT | 15.1 | Điều 8.2a |
+| | 2. Tài liệu thiết kế: | 15.2 | Điều 8.1 |
+| | - Dự án mới: Thiết kế sơ bộ | 15.2a | Điều 8.1 |
+| | - HTTT đang vận hành: Thiết kế thi công | 15.2b | Điều 8.1 |
+| | 3. Thuyết minh đề xuất cấp độ (căn cứ tiêu chí) | 15.3 | Điều 8.2b |
+| | 4. Thuyết minh phương án bảo đảm ATTT theo cấp độ | 15.4 | Điều 8.2c |
 | | 5. Ý kiến chuyên môn (cho cấp độ 4, 5) | 15.5 | *(Không quy định riêng trong TT 12/2022)* |
 | **5** | **Thẩm định hồ sơ** | Điều 12, 16 | **Điều 6** |
-| | **5.1. Nội dung thẩm định:** | 16.1 | Điều 6 (toàn bộ) |
-| | **5.2. Thẩm quyền thẩm định:** | Điều 12 | **Điều 6** |
+| | **5.1. Nội dung thẩm định:** | 16.1 | Điều 6 |
+| | - Sự phù hợp đề xuất cấp độ | 16.1a | Điều 6 |
+| | - Phương án ATTT trong thiết kế | 16.1b | Điều 6 |
+| | - Phương án ATTT trong vận hành | 16.1c | Điều 6 |
+| | **5.2. Thời gian thẩm định:** | 16.2 | *(Không quy định riêng trong TT 12/2022)* |
+| | - Cấp độ 3: Tối đa 15 ngày | 16.2a | |
+| | - Cấp độ 4, 5: Tối đa 30 ngày | 16.2b | |
+| | **5.3. Thẩm quyền thẩm định:** | 12 | Điều 6 |
 | | **Cấp độ 1, 2:** Đơn vị chuyên trách ATTT của chủ quản | 12.1 | Điều 6 |
 | | **Cấp độ 3:** Đơn vị chuyên trách ATTT thẩm định | 12.2a | Điều 6 |
-| | **Cấp độ 4, 5:** Bộ TT&TT / Bộ QP / Bộ CA | 12.3 | Điều 6 |
+| | **Cấp độ 4, 5:** | 12.3 | Điều 6 |
+| | - Bộ TT&TT chủ trì (trừ trường hợp đặc biệt) | 12.3a | Điều 6 |
+| | - Bộ Quốc phòng (HTTT do QP quản lý) | 12.3b | Điều 6 |
+| | - Bộ Công an (HTTT do CA quản lý) | 12.3c | Điều 6 |
+| | - Mẫu văn bản thẩm định | | *(Không có mẫu riêng trong TT 12/2022)* |
 | **6** | **Phê duyệt cấp độ** | Điều 12, 17 | *(Dẫn chiếu NĐ 85/2016)* |
-| **7** | **Triển khai phương án bảo vệ** | Điều 19 | **Điều 9, 10** |
-| | Yêu cầu chung về bảo đảm ATTT theo cấp độ | 19.2 | Điều 9 |
-| | Phương án bảo đảm ATTT từng cấp độ (Phụ lục I–V) | | Điều 10, **Phụ lục I–V** |
+| | **6.1. Hồ sơ phê duyệt:** | 17.1 | |
+| | - Hồ sơ đề xuất cấp độ | 17.1a | |
+| | - Ý kiến thẩm định (từ cấp độ 3) | 17.1b | |
+| | **6.2. Thời gian xử lý:** Tối đa 7 ngày làm việc | 17.2 | |
+| | **6.3. Thẩm quyền phê duyệt:** | 12 | Điều 6 |
+| | **Cấp độ 1, 2:** Đơn vị chuyên trách ATTT | 12.1 | Điều 6 |
+| | **Cấp độ 3:** Chủ quản HTTT | 12.2b | Điều 6 |
+| | **Cấp độ 4:** Chủ quản HTTT | 12.3d | Điều 6 |
+| | **Cấp độ 5:** | 12.3đ | Điều 6 |
+| | - Phương án ATTT: Chủ quản HTTT | | Điều 6 |
+| | - Danh mục HTTT: Thủ tướng CP | | Điều 6 |
+| | - Mẫu tờ trình phê duyệt | | *(Không có mẫu riêng trong TT 12/2022)* |
+| | - Mẫu quyết định phê duyệt | | *(Không có mẫu riêng trong TT 12/2022)* |
+| **7** | **Triển khai phương án bảo vệ** | Điều 19 | **Điều 9, 10, Phụ lục I–V** |
+| | **Nội dung phương án:** | 19.2 | Điều 9 |
+| | 1. Bảo đảm ATTT trong thiết kế, xây dựng | 19.2a | Điều 9, **Phụ lục I–V** |
+| | 2. Bảo đảm ATTT trong vận hành | 19.2b | Điều 9, **Phụ lục I–V** |
+| | 3. Kiểm tra, đánh giá ATTT | 19.2c | Điều 11 |
+| | 4. Quản lý rủi ro ATTT | 19.2d | Điều 9.3e |
+| | 5. Giám sát ATTT | 19.2đ | Điều 9.3 |
+| | 6. Dự phòng, ứng cứu sự cố, khôi phục | 19.2e | Điều 9.3 |
+| | 7. Kết thúc vận hành, thanh lý, hủy bỏ | 19.2g | Điều 9.3g |
+| | - Yêu cầu kết nối giám sát với NCSC | | *(Không đề cập trong TT 12/2022)* |
 | **8** | **Kiểm tra, đánh giá định kỳ** | Điều 20 | **Điều 11, 12** |
-| | **8.1. Nội dung kiểm tra, đánh giá:** | 20.2c | Điều 11 |
-| | **8.2. Hình thức kiểm tra:** | | Điều 11.3 |
-| | - Hộp đen (Black box) | | Điều 11.3a |
-| | - Hộp xám (Gray box) | | Điều 11.3b |
-| | - Hộp trắng (White box) | | Điều 11.3c |
+| | **8.1. Trách nhiệm:** Người đứng đầu chủ quản | 20.1a | Điều 11.1 |
+| | **8.2. Chu kỳ kiểm tra, đánh giá:** | 20.2c | Điều 11.2 |
+| | - Tổng thể cơ quan: Định kỳ 02 năm | 20.2c (gạch đầu 1) | Điều 11.2a |
+| | - Cấp độ 3, 4: Định kỳ hàng năm | 20.2c (gạch đầu 2) | Điều 11.2b |
+| | - Cấp độ 5: Định kỳ 06 tháng hoặc đột xuất | 20.2c (gạch đầu 3) | Điều 11.2b |
+| | **8.3. Yêu cầu tổ chức đánh giá:** | 20.2c (gạch đầu 4) | Điều 11.3 |
+| | - Từ cấp độ 3 trở lên: Tổ chức được cấp phép/chỉ định | | Điều 11.3 |
+| | - Tiêu chí đánh giá theo TCVN 11930:2017 | | Điều 9.1 |
 | **9** | **Báo cáo định kỳ** | Điều 22 | **Điều 13, 14** |
-| | Phương thức gửi, nhận báo cáo | 22 | Điều 13.1 |
-| | Tần suất báo cáo (hàng năm/đột xuất) | 22.4 | Điều 13.2 |
-| | Thời gian chốt số liệu & hạn gửi | | Điều 13.3, 13.4 |
-| | Nội dung báo cáo chi tiết | 22.3–22.5 | Điều 14 |
+| | **Trách nhiệm đơn vị vận hành:** | 22 | Điều 13, 14 |
+| | - Định kỳ đánh giá hiệu quả biện pháp | 22.3 | Điều 14.8 |
+| | - Báo cáo định kỳ/đột xuất theo yêu cầu | 22.4 | Điều 13.2 |
+| | - Phối hợp với Bộ TT&TT | 22.5 | Điều 13.4b |
+| | - Mẫu báo cáo | | *(Không có phụ lục mẫu báo cáo trong TT 12/2022)* |
 
 ---
