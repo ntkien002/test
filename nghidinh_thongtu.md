@@ -7,10 +7,10 @@
 | **PHẦN** | **NỘI DUNG CHI TIẾT** | **NĐ 85/2016** | **TT 12/2022** |
 |----------|----------------------|----------------|----------------|
 | **1** | **Xác định hệ thống thông tin** | Điều 5 | **Điều 3, 4** |
-| | - HTTT chỉ có 1 chủ quản | Khoản 1a | Điều 3.1 |
-| | - HTTT hoạt động độc lập, phục vụ nghiệp vụ cụ thể | Khoản 1b | Điều 3.2 |
-| | - Nếu có nhiều hệ thống thành phần: lấy cấp độ cao nhất | Khoản 2 | Điều 4 |
-| | - Nguyên tắc xác định HTTT để xác định cấp độ | | Điều 3 |
+| | - HTTT chỉ có 1 chủ quản | Khoản 1a | 	Điều 7.1 (xác định HTTT căn cứ khoản 1 Điều 5 NĐ 85) |
+| | - HTTT hoạt động độc lập, phục vụ nghiệp vụ cụ thể | Khoản 1b | Điều 7.2–7.6 (định nghĩa từng loại HTTT) |
+| | - Nếu có nhiều hệ thống thành phần: lấy cấp độ cao nhất | Khoản 2 |  |
+| | - Nguyên tắc xác định HTTT để xác định cấp độ | | 	Điều 7 (toàn bộ) |
 | **2** | **Phân loại thông tin & hệ thống** | Điều 6 | **Điều 5** |
 | | **2.1. Phân loại thông tin:** | Khoản 1 | Điều 5.1 |
 | | • Thông tin công cộng | 1a | 5.1a |
