@@ -200,3 +200,31 @@
 [ ] Hệ thống Màn hình hiển thị/Ghép (Video Wall): HTTT phục vụ trình chiếu, giám sát trực quan tại các trung tâm điều hành.
 
 [ ] Hệ thống Internet vạn vật (IoT): HTTT bao gồm các cảm biến, thiết bị đo lường tự động (VD: Cảm biến quan trắc môi trường, đo đếm điện năng từ xa) và phần mềm thu thập dữ liệu.
+
+- Nếu có nhiều hệ thống thành phần: lấy cấp độ cao nhất:
+ 
+[ ] Hệ thống tổng hợp đa thành phần (Cấp độ toàn cục): Hệ thống lớn bao gồm nhiều hệ thống thành phần bên trong (ví dụ: Cổng dịch vụ công tích hợp nhiều phân hệ như Một cửa điện tử, Đăng ký kinh doanh, Thanh toán trực tuyến), đã được đánh giá và phê duyệt ở Cấp độ cao nhất trong số các thành phần trực thuộc.
+
+[ ] Hệ thống liên thông dữ liệu liên tỉnh/liên ngành: Hệ thống kết nối giữa nhiều cơ quan mà thành phần cốt lõi có cấp độ cao nhất chi phối toàn bộ, đã lấy cấp độ của thành phần cao nhất làm cấp độ chung cho toàn hệ thống kết nối.
+
+[ ] Hệ thống tích hợp phần cứng và phần mềm chuyên dụng: Hệ thống bao gồm cả hạ tầng trung tâm dữ liệu (Cấp độ X) và phần mềm ứng dụng nghiệp vụ (Cấp độ Y), đã áp dụng nguyên tắc lấy cấp độ cao hơn để lập hồ sơ đề xuất cấp độ chung.
+
+[ ] Hệ thống phân chia theo phân vùng mạng (Zone): Hệ thống có các vùng mạng bảo mật khác nhau (Vùng DMZ, Vùng mạng nội bộ, Vùng dữ liệu nhạy cảm) có cấp độ khác nhau, đã chọn cấp độ của vùng khắt khe nhất/cao nhất làm cấp độ toàn hệ thống.
+
+[ ] Hệ thống nâng cấp mở rộng (Có phân kỳ đầu tư): Hệ thống cũ (Cấp độ thấp) kết hợp thêm phân hệ mới nâng cấp (Cấp độ cao hơn), đã thực hiện rà soát và điều chỉnh nâng cấp độ chung của toàn hệ thống lên mức cao nhất theo đúng quy định.
+
+[ ] Hệ thống điện toán đám mây đa dịch vụ: Nền tảng Cloud triển khai nhiều ứng dụng dịch vụ với các mức độ an toàn khác nhau, đã lấy cấp độ của dịch vụ/thành phần yêu cầu bảo mật cao nhất làm cấp độ phê duyệt chung cho toàn bộ nền tảng.
+
+[ ] Hệ thống kết hợp Trung tâm điều hành và Thiết bị ngoại vi: Hệ thống bao gồm Trung tâm giám sát điều hành (IOC/SOC - cấp độ cao) kết nối với hàng loạt các camera, cảm biến hoặc trạm thu thập dữ liệu nhỏ lẻ ở bên ngoài (cấp độ thấp), đã chọn cấp độ của Trung tâm điều hành làm cấp độ chung.
+
+[ ] Hệ thống phần mềm lõi tích hợp Cổng thanh toán/Xác thực: Hệ thống nghiệp vụ thông thường (cấp độ thấp) có tích hợp phân hệ thanh toán trực tuyến hoặc định danh điện tử bảo mật cao (cấp độ cao), đã lấy cấp độ của phân hệ thanh toán/xác thực làm chuẩn chung.
+
+[ ] Hệ thống phân tầng kiến trúc (Ứng dụng - Cơ sở dữ liệu - Lưu trữ): Hệ thống được bóc tách thành nhiều tầng công nghệ khác nhau với mức độ rủi ro khác nhau, đã áp dụng quy tắc chọn cấp độ của tầng có yêu cầu bảo vệ khắt khe nhất.
+
+[ ] Hệ thống dùng chung liên cơ quan (Cơ quan trung ương và địa phương): Hệ thống có các thành phần nhánh chạy tại nhiều địa phương với quy mô khác nhau, nhưng hệ thống lõi tập trung đặt tại trung ương có yêu cầu bảo mật cao nhất đã chi phối và quyết định cấp độ chung của toàn hệ thống.
+
+[ ] Hệ thống kế thừa tích hợp ứng dụng cũ (Legacy System): Hệ thống mới xây dựng (cấp độ cao) có kết nối, gọi dữ liệu từ các hệ thống phần mềm cũ (cấp độ thấp), đã lập hồ sơ phê duyệt cấp độ toàn cục theo phân hệ mới có cấp độ cao nhất.
+
+[ ] Hệ thống kết hợp mạng nội bộ và dịch vụ công khai Internet: Hệ thống vừa phục vụ nghiệp vụ nội bộ khép kín vừa mở rộng cổng giao tiếp ra ngoài Internet, đã dựa trên thành phần tiếp xúc Internet có rủi ro lớn hơn để xác định cấp độ cao nhất cho toàn hệ thống.
+
+- Nguyên tắc xác định HTTT để xác định cấp độ
