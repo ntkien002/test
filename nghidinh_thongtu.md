@@ -4,7 +4,7 @@
 ## BẢNG QUY TRÌNH CHI TIẾT BẢO ĐẢM AN TOÀN HỆ THỐNG THÔNG TIN THEO CẤP ĐỘ  
 *(Đối chiếu Nghị định 85/2016/NĐ-CP và Thông tư 12/2022/TT-BTTTT)*
 
-| **BƯỚC** | **NỘI DUNG CHI TIẾT** | **NĐ 85/2016** | **TT 12/2022** |
+| **PHẦN** | **NỘI DUNG CHI TIẾT** | **NĐ 85/2016** | **TT 12/2022** |
 |----------|----------------------|----------------|----------------|
 | **1** | **Xác định hệ thống thông tin** | Điều 5 | **Điều 3, 4** |
 | | - HTTT chỉ có 1 chủ quản | Khoản 1a | Điều 3.1 |
