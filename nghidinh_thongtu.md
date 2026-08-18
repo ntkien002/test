@@ -141,4 +141,62 @@
 
 [ ] Hệ thống đầu tư theo đối tác công tư (PPP/BOT/BTL): Dự án do nhà nước và tư nhân hợp tác, hợp đồng dự án quy định rõ chỉ có 01 pháp nhân (Cơ quan nhà nước hoặc Doanh nghiệp dự án) nắm quyền chủ quản trong vòng đời hiện tại của hệ thống.
 
+- HTTT hoạt động độc lập, phục vụ nghiệp vụ cụ thể
 
+1. Nhóm HTTT Mạng cục bộ, Mạng diện rộng (Theo Điều 7.2)
+
+[ ] Mạng Cục bộ (LAN): HTTT chỉ bao gồm hạ tầng mạng, đường truyền, thiết bị định tuyến, thiết bị chuyển mạch và thiết bị bảo mật nội bộ của một trụ sở/tòa nhà.
+
+[ ] Mạng Diện rộng (WAN): HTTT bao gồm hệ thống đường truyền và thiết bị mạng phục vụ kết nối thông suốt giữa trụ sở chính và các chi nhánh/đơn vị trực thuộc.
+
+[ ] Mạng Không dây chuyên dùng (WLAN/Wi-Fi): HTTT cung cấp kết nối mạng không dây độc lập, có cơ chế quản lý xác thực riêng (không gộp chung với LAN).
+
+2. Nhóm HTTT Điều khiển công nghiệp - ICS (Theo Điều 7.3)
+
+[ ] Hệ thống SCADA: HTTT giám sát và thu thập dữ liệu phục vụ quản lý mạng lưới diện rộng (VD: Lưới điện quốc gia, mạng lưới cấp thoát nước, giao thông thông minh).
+
+[ ] Hệ thống Điều khiển phân tán (DCS): HTTT điều khiển quy trình sản xuất tập trung trong một cơ sở (VD: Nhà máy lọc hóa dầu, nhà máy nhiệt điện, dây chuyền sản xuất lớn).
+
+[ ] Hệ thống PLC / Thiết bị điều khiển độc lập: HTTT phục vụ điều khiển một máy móc, rô-bốt hoặc công đoạn sản xuất cụ thể trong nhà máy.
+
+3. Nhóm HTTT cung cấp thông tin, dịch vụ trên Internet (Theo Điều 7.4)
+
+[ ] Cổng / Trang thông tin điện tử (Portal / Website): HTTT phục vụ công bố thông tin, tin tức của cơ quan, tổ chức ra công chúng.
+
+[ ] Hệ thống Dịch vụ công trực tuyến: HTTT phục vụ tiếp nhận, xử lý và trả kết quả thủ tục hành chính cho người dân và doanh nghiệp.
+
+[ ] Ứng dụng di động (Mobile App) công cộng: HTTT cung cấp dịch vụ trực tiếp cho người dùng qua ứng dụng cài đặt trên thiết bị di động (VD: App khai báo y tế, App thanh toán).
+
+[ ] Hệ thống Thư điện tử (Email Server): HTTT hoạt động độc lập phục vụ trao đổi thông tin, giao dịch công việc qua môi trường mạng.
+
+[ ] Hệ thống Thương mại điện tử: HTTT phục vụ bán hàng, giao dịch trực tuyến, đấu thầu qua mạng.
+
+4. Nhóm HTTT Hạ tầng, Trung tâm dữ liệu, Nền tảng (Theo Điều 7.5)
+
+[ ] Trung tâm dữ liệu / Phòng máy chủ (Data Center / Server Room): HTTT đóng vai trò là hạ tầng dùng chung (hệ thống điện, làm mát, máy chủ vật lý, lưu trữ) cung cấp tài nguyên cho các phần mềm khác.
+
+[ ] Nền tảng Điện toán đám mây (Cloud Platform): HTTT cung cấp hạ tầng mạng/máy chủ như một dịch vụ (IaaS) hoặc nền tảng phát triển (PaaS) cho các đơn vị sử dụng chung.
+
+[ ] Nền tảng tích hợp, chia sẻ dữ liệu (LGSP / NDXP): HTTT đóng vai trò là trục liên thông, trung gian kết nối để đồng bộ dữ liệu giữa nhiều HTTT khác nhau.
+
+[ ] Hệ thống Giám sát an toàn thông tin (SOC): HTTT chuyên biệt độc lập dùng để thu thập log, giám sát, phân tích và cảnh báo sự cố an toàn thông tin mạng.
+
+5. Nhóm HTTT Phần mềm, Ứng dụng nghiệp vụ nội bộ (Theo Điều 7.6)
+
+[ ] Phần mềm Quản lý văn bản và Điều hành (e-Office): HTTT phục vụ luân chuyển văn bản, hồ sơ công việc, chữ ký số hành chính nội bộ.
+
+[ ] Hệ thống Quản trị nguồn lực (ERP / Back-office): HTTT bao gồm phần mềm phục vụ các nghiệp vụ lõi như Kế toán, Tài chính, Quản lý Nhân sự, Quản trị tài sản.
+
+[ ] Hệ thống Nghiệp vụ chuyên ngành đặc thù: HTTT phần mềm phục vụ chức năng quản lý nhà nước/kinh doanh chuyên biệt (VD: Phần mềm Quản lý bệnh viện HIS, Core Banking, Phần mềm quản lý đào tạo, Phần mềm Hải quan/Thuế).
+
+[ ] Cơ sở dữ liệu tập trung (Data Warehouse / Datalake): HTTT được xây dựng độc lập chỉ nhằm mục đích lưu trữ, xử lý, và quản trị kho dữ liệu gốc của tổ chức.
+
+6. Nhóm HTTT Thiết bị đầu cuối chuyên dụng (Các nghiệp vụ vật lý độc lập)
+
+[ ] Hệ thống Camera giám sát an ninh (CCTV): HTTT bao gồm camera, đầu ghi và phần mềm quản lý hình ảnh hoạt động độc lập phục vụ an ninh.
+
+[ ] Hệ thống Hội nghị truyền hình trực tuyến: HTTT bao gồm MCU, camera, thiết bị đầu cuối phục vụ họp trực tuyến, chỉ đạo điều hành.
+
+[ ] Hệ thống Màn hình hiển thị/Ghép (Video Wall): HTTT phục vụ trình chiếu, giám sát trực quan tại các trung tâm điều hành.
+
+[ ] Hệ thống Internet vạn vật (IoT): HTTT bao gồm các cảm biến, thiết bị đo lường tự động (VD: Cảm biến quan trắc môi trường, đo đếm điện năng từ xa) và phần mềm thu thập dữ liệu.
