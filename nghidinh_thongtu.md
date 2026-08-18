@@ -114,3 +114,31 @@
 | | - Mẫu báo cáo | |  |
 
 ---
+# 1: 
+- HTTT chỉ có 1 chủ quản
+
+[ ] Đơn vị tự đầu tư & quản lý: Tổ chức tự xuất kinh phí xây dựng và đứng tên pháp nhân làm chủ quản (Trường hợp cơ bản nhất).
+
+[ ] Hệ thống đi thuê (Cloud/SaaS): Tổ chức bỏ tiền thuê dịch vụ và đứng tên chủ quản; tổ chức cung cấp dịch vụ (Viettel, VNPT, FPT, AWS...) chỉ đóng vai trò cung cấp hạ tầng/vận hành.
+
+[ ] Hệ thống mua lại / Chuyển giao trọn gói: Tổ chức mua đứt toàn bộ hệ thống hoặc mã nguồn từ đơn vị phát triển và đứng tên pháp nhân làm chủ quản duy nhất sau khi hoàn tất nghiệm thu.
+
+[ ] Hệ thống dùng chung / Liên ngành: Nhiều cơ quan/đơn vị cùng dùng hoặc góp vốn, nhưng đã có văn bản hiệp đồng cử đúng 01 đơn vị đại diện làm chủ quản.
+
+[ ] Thành lập pháp nhân mới (Liên doanh): Các bên hợp tác không cử đại diện mà cùng lập một pháp nhân mới (Công ty liên doanh, Tổ chức độc lập) để đứng tên làm cơ quan chủ quản duy nhất.
+
+[ ] Hệ thống phân cấp (Quản lý tập trung): Cấp trên (Bộ/Ngành/Tổng công ty) trực tiếp đứng tên chủ quản toàn bộ hệ thống từ trên xuống dưới; cấp dưới chỉ là nơi tiếp nhận sử dụng.
+
+[ ] Hệ thống phân cấp (Đã phân quyền): Hệ thống do cấp trên cấp phát, nhưng có quyết định/văn bản chính thức giao lại toàn quyền chủ quản cho cấp dưới (Sở/Công ty con) quản lý độc lập.
+
+[ ] Ủy quyền theo vùng/địa bàn đặc thù: Hệ thống do Tập đoàn/Công ty mẹ đầu tư, nhưng có văn bản chỉ định đích danh 01 Chi nhánh hoặc Công ty con tại khu vực đó làm chủ quản độc lập.
+
+[ ] Chuyển giao sau sáp nhập/chia tách: Đơn vị cũ giải thể, đã có biên bản chính thức bàn giao quyền chủ quản hệ thống sang cho 01 cơ quan/pháp nhân mới tiếp nhận.
+
+[ ] Bàn giao từ Ban Quản lý dự án (Xây dựng xong): Hệ thống đã hoàn thành đầu tư, Ban QLDA đã có biên bản nghiệm thu và bàn giao chính thức quyền chủ quản lại cho 01 cơ quan/đơn vị thụ hưởng cuối cùng.
+
+[ ] Hệ thống nhận tài trợ / hiến tặng: Hệ thống do tổ chức, cá nhân khác tài trợ/viện trợ, sau đó đã có biên bản bàn giao toàn quyền chủ quản cho 01 đơn vị tiếp nhận sử dụng duy nhất.
+
+[ ] Hệ thống đầu tư theo đối tác công tư (PPP/BOT/BTL): Dự án do nhà nước và tư nhân hợp tác, hợp đồng dự án quy định rõ chỉ có 01 pháp nhân (Cơ quan nhà nước hoặc Doanh nghiệp dự án) nắm quyền chủ quản trong vòng đời hiện tại của hệ thống.
+
+
