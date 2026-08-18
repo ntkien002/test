@@ -1,4 +1,4 @@
-
+# +1: rest model link ung dung nhu the nao vao pentest
 
 ## BẢNG QUY TRÌNH CHI TIẾT BẢO ĐẢM AN TOÀN HỆ THỐNG THÔNG TIN THEO CẤP ĐỘ
 *(Đối chiếu Nghị định 85/2016/NĐ-CP và Thông tư 12/2022/TT-BTTTT)*
